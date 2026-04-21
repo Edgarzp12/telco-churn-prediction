@@ -1,133 +1,157 @@
-# 📊 Telco Customer Churn Prediction
+# Telco Customer Churn Prediction
 
-## 🚀 Overview
+## Project Summary
 
-This project aims to predict customer churn and identify the key drivers behind it using machine learning and model explainability techniques.
+Customer churn is one of the most important challenges for subscription-based businesses. Acquiring a new customer is usually more expensive than retaining an existing one, which makes early churn detection valuable.
 
-Beyond prediction, the focus is on **understanding why customers churn** and how businesses can act on those insights.
+In this project, I developed a machine learning model to identify customers who are likely to leave a telecom provider. The goal was not only to generate accurate predictions, but also to understand the main factors influencing churn so those insights can support retention strategies.
 
 ---
 
-## 🎯 Objective
+## Main Objectives
 
 * Predict whether a customer will churn
-* Minimize missed churn cases (false negatives)
-* Extract actionable insights for retention strategies
+* Reduce missed churn cases (false negatives)
+* Understand the variables most associated with churn
+* Translate model outputs into business actions
 
 ---
 
-## 🧠 Methodology
+## Dataset & Preparation
 
-### 1. Data Preparation
+The dataset contains customer demographic information, account details, billing variables, subscribed services, and churn status.
 
-* Cleaned missing values (`TotalCharges`)
-* Encoded categorical variables
-* Stratified train-test split
+Steps completed before modeling:
 
----
-
-### 2. Models
-
-#### Logistic Regression
-
-* Strong baseline
-* ROC-AUC ≈ 0.83
-* Limited recall (~0.57)
+* Treated missing values in `TotalCharges`
+* Converted categorical variables into numerical format
+* Split data into train and test sets using stratification
+* Reviewed class imbalance in the target variable
 
 ---
 
-#### Decision Tree
+## Modeling Process
 
-* Captured non-linear relationships
-* Improved recall (~0.61)
-* Sensitive to overfitting
+I tested multiple approaches to compare predictive performance and interpretability.
 
----
+### Logistic Regression
 
-#### XGBoost (Final Model)
+Used as a baseline model due to its simplicity and transparency.
 
-* Gradient boosting with regularization
-* Handled class imbalance (`scale_pos_weight`)
-* Tuned using RandomizedSearchCV
+**Results**
 
----
+* ROC-AUC around 0.83
+* Stable overall performance
+* Lower recall for churn customers
 
-## ⚙️ Model Optimization
+### Decision Tree
 
-* Cross-validation (StratifiedKFold)
-* Hyperparameter tuning
-* Threshold tuning to control recall vs precision
+Included to capture non-linear patterns and interaction effects.
 
-> Key insight: Model performance depends not only on training, but also on how predictions are converted into decisions.
+**Results**
 
----
+* Better churn recall than logistic regression
+* Easier to visualize decisions
+* More prone to overfitting
 
-## 📈 Final Results
+### XGBoost (Selected Model)
 
-* **ROC-AUC:** ~0.84
-* **Recall (Churn):** ~0.78
-* **False Negatives reduced significantly vs baseline**
+The final model was XGBoost because it delivered the best balance between recall and ranking performance.
 
-Trade-off:
+**Why it performed better**
 
-* Higher recall increases false positives, which may increase operational cost
-
----
-
-## 🔍 Model Explainability (SHAP)
-
-SHAP was used to interpret predictions and identify churn drivers.
-
-### Key Insights:
-
-* 📉 **Low tenure** → strongly increases churn risk
-* 📄 **Month-to-month contracts** → high churn probability
-* 💰 **High monthly charges** → increased churn likelihood
-* 🛠️ Additional services → reduce churn probability
+* Handles complex relationships well
+* Includes regularization
+* Works effectively with imbalanced data
+* Strong performance after tuning
 
 ---
 
-### SHAP Summary Plot
+## Model Tuning
+
+To improve results, I applied:
+
+* `RandomizedSearchCV` for hyperparameter optimization
+* `StratifiedKFold` cross-validation
+* Threshold tuning to prioritize churn detection
+
+One important takeaway from this phase was that model quality depends not only on probabilities, but also on the threshold used to classify customers as churners.
+
+---
+
+## Final Performance
+
+**Selected Model: XGBoost**
+
+* ROC-AUC: ~0.84
+* Recall (Churn Class): ~0.78
+* Significant reduction in false negatives compared with the baseline model
+
+### Business Trade-off
+
+Increasing recall helps identify more at-risk customers, but it can also generate more false positives. In practice, the best threshold depends on the cost of retention campaigns versus the cost of losing a customer.
+
+---
+
+## Explainability with SHAP
+
+To make the model easier to interpret, I used SHAP values.
+
+### Main Drivers of Churn
+
+* Customers with **low tenure** were more likely to churn
+* **Month-to-month contracts** showed higher churn risk
+* Higher **monthly charges** increased churn probability
+* Customers with additional services were less likely to leave
+
+### SHAP Visualization
 
 ![SHAP Summary](images/shap_summary.png)
 
 ---
 
-## 💡 Business Insights
+## Business Recommendations
 
-* Focus retention efforts on **new customers**
-* Encourage **long-term contracts**
-* Monitor customers with **high monthly charges**
-* Promote value-added services to reduce churn
+Based on the results, a telecom company could consider:
 
----
-
-## 🧩 Key Learnings
-
-* Class imbalance significantly impacts model behavior
-* Threshold tuning is critical in classification problems
-* Model interpretability is essential for business adoption
+* Strengthening onboarding programs for new customers
+* Promoting annual or multi-year contracts
+* Reviewing pricing strategies for high-charge segments
+* Bundling additional services to increase retention
 
 ---
 
-## 🔮 Future Improvements
+## What I Learned
 
-* Compare with resampling techniques (SMOTE)
-* Deploy model as an API
-* Build a dashboard for real-time insights
+This project reinforced several practical lessons:
+
+* Class imbalance can distort model performance if ignored
+* Recall can be more valuable than accuracy in churn problems
+* Threshold selection is a business decision, not only a technical one
+* Explainability helps convert models into actionable tools
 
 ---
 
-## 🛠️ Tech Stack
+## Possible Next Steps
+
+* Compare results with SMOTE or other resampling methods
+* Deploy the model through an API
+* Create a dashboard for churn monitoring
+* Retrain periodically with updated customer data
+
+---
+
+## Tools Used
 
 * Python
+* Pandas
+* NumPy
 * Scikit-learn
 * XGBoost
 * SHAP
-* Pandas / NumPy
 
 ---
 
-## 📬 Contact
+## Contact
 
-If you’d like to discuss this project or collaborate, feel free to reach out.
+If you'd like to discuss the project, exchange ideas, or collaborate, feel free to connect with me.
